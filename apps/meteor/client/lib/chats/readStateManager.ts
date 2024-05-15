@@ -167,6 +167,8 @@ export class ReadStateManager extends Emitter {
 		}
 
 		return sdk.rest.post('/v1/subscriptions.read', { rid: this.rid }).then(() => {
+			console.log("notification frontend");
+			
 			RoomHistoryManager.getRoom(this.rid).unreadNotLoaded.set(0);
 		});
 	}

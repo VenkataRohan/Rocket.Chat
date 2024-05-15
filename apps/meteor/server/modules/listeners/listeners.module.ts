@@ -170,15 +170,18 @@ export class ListenersModule {
 			if (!message.rid) {
 				return;
 			}
-
-			notifications.streamRoomMessage._emit('__my_messages__', [message], undefined, false, (streamer, _sub, eventName, args, allowed) =>
-				streamer.changedPayload(streamer.subscriptionName, 'id', {
+			console.log("watch msg event")	
+			notifications.streamRoomMessage._emit('__my_messages__', [message], undefined, false, (streamer, _sub, eventName, args, allowed) =>{
+			console.log("eventName")	
+			console.log(eventName)	
+			return streamer.changedPayload(streamer.subscriptionName, 'id', {
 					eventName,
 					args: [...args, allowed],
-				}),
+				})},
 			);
-
-			notifications.streamRoomMessage.emitWithoutBroadcast(message.rid, message);
+				console.log("message")
+				console.log(message)
+			// notifications.streamRoomMessage.emitWithoutBroadcast(message.rid, message);
 		});
 
 		service.onEvent('notify.messagesRead', ({ rid, until, tmid }): void => {

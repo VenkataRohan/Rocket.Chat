@@ -127,6 +127,8 @@ export const sendNotification = async ({
 			isThread,
 		})
 	) {
+		console.log("get notfication backend");
+		
 		await notifyDesktopUser({
 			notificationMessage,
 			userId: subscription.u._id,

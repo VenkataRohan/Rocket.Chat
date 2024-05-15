@@ -177,6 +177,7 @@ class KonchatNotification {
 		const userId = Meteor.userId();
 		const newMessageNotification = getUserPreference<string>(userId, 'newMessageNotification');
 		const audioVolume = getUserPreference(userId, 'notificationsSoundVolume', 100);
+		console.log("new message noti")
 
 		if (!rid) {
 			return;

@@ -47,6 +47,7 @@ const RoomBody = (): ReactElement => {
 	if (!chat) {
 		throw new Error('No ChatContext provided');
 	}
+console.log(chat);
 
 	const t = useTranslation();
 	const isLayoutEmbedded = useEmbeddedLayout();
@@ -97,7 +98,7 @@ const RoomBody = (): ReactElement => {
 		handleMarkAsReadButtonClick,
 		counter: [unread],
 	} = useHandleUnread(room, subscription);
-
+	// console.log(unread)
 	const { innerRef: dateScrollInnerRef, bubbleRef, listStyle, ...bubbleDate } = useDateScroll();
 
 	const { innerRef: isAtBottomInnerRef, atBottomRef, sendToBottom, sendToBottomIfNecessary, isAtBottom } = useListIsAtBottom();
@@ -224,6 +225,7 @@ const RoomBody = (): ReactElement => {
 				>
 					<div className='messages-container-wrapper'>
 						<div className='messages-container-main' ref={wrapperBoxRefs} {...fileUploadTriggerProps}>
+							pouuyiutrreewwqxterrxdses
 							<DropTargetOverlay {...fileUploadOverlayProps} />
 							<Box position='absolute' w='full'>
 								{roomLeader ? (
@@ -249,13 +251,16 @@ const RoomBody = (): ReactElement => {
 									))}
 								</div>
 								{Boolean(unread) && (
+									<><div style={{backgroundColor:"red"}}>adsadsad {unread}</div>
 									<UnreadMessagesIndicator
+									
 										count={unread}
 										onJumpButtonClick={handleUnreadBarJumpToButtonClick}
 										onMarkAsReadButtonClick={handleMarkAsReadButtonClick}
 									/>
+									</>
 								)}
-
+								
 								<BubbleDate ref={bubbleRef} {...bubbleDate} />
 							</Box>
 
@@ -296,6 +301,7 @@ const RoomBody = (): ReactElement => {
 														)}
 													</>
 												) : null}
+													<div>ksdfjs1323123123dfjasdfkjdslkf</div>
 												<MessageList rid={room._id} messageListRef={innerBoxRef} />
 												{hasMoreNextMessages ? (
 													<li className='load-more'>{isLoadingMoreMessages ? <LoadingMessagesIndicator /> : null}</li>
@@ -306,6 +312,7 @@ const RoomBody = (): ReactElement => {
 								</div>
 							</div>
 							<RoomComposer>
+								jjjjkjlkjlkjlkjlkjlkjlkjlkjlkjgfsAFSDFS
 								<ComposerContainer
 									subscription={subscription}
 									onResize={handleComposerResize}

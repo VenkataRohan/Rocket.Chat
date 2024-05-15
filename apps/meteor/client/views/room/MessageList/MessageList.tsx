@@ -20,20 +20,23 @@ type MessageListProps = {
 
 export const MessageList = function MessageList({ rid, messageListRef }: MessageListProps) {
 	const messages = useMessages({ rid });
+	console.log(messages)
 	const subscription = useRoomSubscription();
 	const showUserAvatar = !!useUserPreference<boolean>('displayAvatars');
 	const messageGroupingPeriod = Number(useSetting('Message_GroupingPeriod'));
 	const firstUnreadMessageId = useFirstUnreadMessageId();
-
+	console.log(messageListRef)
 	return (
 		<MessageListProvider messageListRef={messageListRef}>
 			<SelectedMessagesProvider>
+				<div >
 				{messages.map((message, index, { [index - 1]: previous }) => {
 					const sequential = isMessageSequential(message, previous, messageGroupingPeriod);
 					const showUnreadDivider = firstUnreadMessageId === message._id;
 					const system = MessageTypes.isSystemMessage(message);
 					const visible = !isThreadMessage(message) && !system;
-
+					
+					
 					return (
 						<Fragment key={message._id}>
 							<MessageListItem
@@ -49,6 +52,7 @@ export const MessageList = function MessageList({ rid, messageListRef }: Message
 						</Fragment>
 					);
 				})}
+				</div>
 			</SelectedMessagesProvider>
 		</MessageListProvider>
 	);

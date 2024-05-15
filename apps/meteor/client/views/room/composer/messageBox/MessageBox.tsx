@@ -196,7 +196,8 @@ const MessageBox = ({
 		const { which: keyCode } = event;
 
 		const input = event.target as HTMLTextAreaElement;
-
+		// console.log(input.value);
+		
 		const isSubmitKey = keyCode === keyCodes.CARRIAGE_RETURN || keyCode === keyCodes.NEW_LINE;
 
 		if (isSubmitKey) {
@@ -359,6 +360,7 @@ const MessageBox = ({
 
 	return (
 		<>
+		jlkjlkj
 			{chat.composer?.quotedMessages && <MessageBoxReplies />}
 			{shouldPopupPreview && popup && (
 				<ComposerBoxPopup select={select} items={items} focused={focused} title={popup.title} renderItem={popup.renderItem} />

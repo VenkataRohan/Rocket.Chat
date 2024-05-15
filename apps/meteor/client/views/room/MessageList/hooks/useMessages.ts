@@ -16,6 +16,7 @@ const mergeHideSysMessages = (
 };
 
 export const useMessages = ({ rid }: { rid: IRoom['_id'] }): IMessage[] => {
+	console.log("inside usemsg")
 	const showThreadsInMainChannel = useUserPreference<boolean>('showThreadsInMainChannel', false);
 	const hideSysMesSetting = useSetting<MessageTypesValues[]>('Hide_System_Messages') ?? [];
 	const room = useRoom();
@@ -34,15 +35,22 @@ export const useMessages = ({ rid }: { rid: IRoom['_id'] }): IMessage[] => {
 		}),
 		[rid, hideSysMessages, showThreadsInMainChannel],
 	);
+	console.log(query)
 
 	return useReactiveValue(
 		useCallback(
-			() =>
-				ChatMessage.find(query, {
+			() =>{
+				// console.log("chat msg query")
+				const res =  ChatMessage.find(query, {
 					sort: {
 						ts: 1,
 					},
-				}).fetch(),
+				}).fetch()
+				
+				console.log("res")
+				console.log(res)
+			return res
+			},
 			[query],
 		),
 	);

@@ -32,7 +32,7 @@ function notifyNewMessageAudio(rid?: string): void {
 	const hasFocus = document.hasFocus();
 	const messageIsInOpenedRoom = RoomManager.opened === rid;
 	const muteFocusedConversations = getUserPreference(Meteor.userId(), 'muteFocusedConversations');
-
+	console.log("audio notification")
 	if (isLayoutEmbedded()) {
 		if (!hasFocus && messageIsInOpenedRoom) {
 			// Play a notification sound
@@ -104,7 +104,7 @@ Meteor.startup(() => {
 				// Show a notification.
 				KonchatNotification.showDesktop(notification);
 			}
-
+			console.log("noti func call")
 			notifyNewMessageAudio(notification.payload.rid);
 		});
 

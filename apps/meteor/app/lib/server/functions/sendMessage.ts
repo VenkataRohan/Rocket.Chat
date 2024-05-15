@@ -211,21 +211,28 @@ export const sendMessage = async function (user: any, message: any, room: any, u
 	if (!user || !message || !room._id) {
 		return false;
 	}
-
+	// console.log("send msg")
+	// console.log(message)
+	// console.log(user)
+	// console.log(room)
 	await validateMessage(message, room, user);
 	prepareMessageObject(message, room._id, user);
 
 	if (message.t === 'otr') {
+		console.log("if condi1")
 		notifications.streamRoomMessage.emit(message.rid, message, user, room);
+		console.log(`${message} ${user} ${room}`)
 		return message;
 	}
 
 	if (settings.get('Message_Read_Receipt_Enabled')) {
+		console.log("if condi2")
 		message.unread = true;
 	}
 
 	// For the Rocket.Chat Apps :)
 	if (Apps?.isLoaded()) {
+		console.log("if condi3")
 		const listenerBridge = Apps.getBridges()?.getListenerBridge();
 
 		const prevent = await listenerBridge?.messageEvent('IPreMessageSentPrevent', message);
@@ -242,6 +249,7 @@ export const sendMessage = async function (user: any, message: any, room: any, u
 			message = Object.assign(message, result);
 
 			// Some app may have inserted malicious/invalid values in the message, let's check it again
+			console.log("validate")
 			await validateMessage(message, room, user);
 		}
 	}
@@ -285,6 +293,7 @@ export const sendMessage = async function (user: any, message: any, room: any, u
 
 	// Execute all callbacks
 	await callbacks.run('afterSaveMessage', message, room);
+	console.log("broadcastmsg")
 	void broadcastMessageFromData({
 		id: message._id,
 	});

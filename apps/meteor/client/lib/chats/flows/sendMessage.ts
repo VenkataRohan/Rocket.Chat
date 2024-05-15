@@ -12,7 +12,8 @@ import { processTooLongMessage } from './processTooLongMessage';
 
 const process = async (chat: ChatAPI, message: IMessage, previewUrls?: string[]): Promise<void> => {
 	KonchatNotification.removeRoomNotification(message.rid);
-
+	console.log("send msg");
+	
 	if (await processSetReaction(chat, message)) {
 		return;
 	}
@@ -47,7 +48,8 @@ export const sendMessage = async (
 
 	chat.readStateManager.clearUnreadMark();
 	await chat.readStateManager.debouncedMarkAsRead();
-
+// console.log(text)
+// console.log("text")
 	text = text.trim();
 
 	if (!text && !chat.currentEditing) {
