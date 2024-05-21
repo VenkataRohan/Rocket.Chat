@@ -232,7 +232,7 @@ export const sendMessage = async function (user: any, message: any, room: any, u
 
 	// For the Rocket.Chat Apps :)
 	if (Apps?.isLoaded()) {
-		console.log("if condi3")
+		// console.log("if condi3")
 		const listenerBridge = Apps.getBridges()?.getListenerBridge();
 
 		const prevent = await listenerBridge?.messageEvent('IPreMessageSentPrevent', message);
@@ -249,7 +249,7 @@ export const sendMessage = async function (user: any, message: any, room: any, u
 			message = Object.assign(message, result);
 
 			// Some app may have inserted malicious/invalid values in the message, let's check it again
-			console.log("validate")
+			// console.log("validate")
 			await validateMessage(message, room, user);
 		}
 	}
@@ -292,8 +292,12 @@ export const sendMessage = async function (user: any, message: any, room: any, u
 	/* Defer other updates as their return is not interesting to the user */
 
 	// Execute all callbacks
+	console.log(message)
+	console.log(room)
+	console.log("room000-0-0-0")
+
 	await callbacks.run('afterSaveMessage', message, room);
-	console.log("broadcastmsg")
+	console.log("broadcastmsg1212")
 	void broadcastMessageFromData({
 		id: message._id,
 	});

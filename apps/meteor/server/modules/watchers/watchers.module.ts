@@ -75,6 +75,8 @@ export function initWatchers(watcher: DatabaseWatcher, broadcast: BroadcastCallb
 					if (!message) {
 						return;
 					}
+					// console.log("uuurusururuu3213183092813984873249878");
+					
 					void broadcast('watch.messages', { message });
 					break;
 			}
@@ -149,6 +151,9 @@ export function initWatchers(watcher: DatabaseWatcher, broadcast: BroadcastCallb
 				if (!subscription) {
 					return;
 				}
+				console.log("watch.subscriptions");
+				// console.log(clientAction);
+				// console.log(subscription);
 				void broadcast('watch.subscriptions', { clientAction, subscription });
 				break;
 			}

@@ -4,6 +4,7 @@ import type { IMessage, IRoom, IUser, AtLeast } from '@rocket.chat/core-typings'
 import { roomCoordinator } from '../../../../../server/lib/rooms/roomCoordinator';
 import { metrics } from '../../../../metrics/server';
 import { settings } from '../../../../settings/server';
+import { Meteor } from 'meteor/meteor';
 
 /**
  * Send notification to user
@@ -22,6 +23,7 @@ export async function notifyDesktopUser({
 	room,
 	duration,
 	notificationMessage,
+	reaction
 }: {
 	userId: string;
 	user: AtLeast<IUser, '_id' | 'name' | 'username'>;
@@ -29,14 +31,23 @@ export async function notifyDesktopUser({
 	room: IRoom;
 	duration?: number;
 	notificationMessage: string;
+	reaction : string;
 }): Promise<void> {
 	const { title, text, name } = await roomCoordinator
 		.getRoomDirectives(room.t)
 		.getNotificationDetails(room, user, notificationMessage, userId);
+	console.log(user._id);
+	console.log(userId);
+	console.log(Meteor.userId());
+	
+	console.log("user 23434234234");
+	// console.log('message payload 23434234234');
+	// console.log('message payload 23434234234');
 
 	const payload = {
 		title: title || '',
-		text,
+		text : reaction !== '' ? reaction : text,
+		reacted : reaction !== ''? true :undefined,
 		duration,
 		payload: {
 			_id: '',
@@ -49,6 +60,7 @@ export async function notifyDesktopUser({
 				tmid: message.tmid,
 			}),
 			sender: message.u,
+			// sender: { _id: user._id, username: user.username, name: user.name },
 			type: room.t,
 			message: {
 				msg: 'msg' in message ? message.msg : '',
@@ -61,8 +73,11 @@ export async function notifyDesktopUser({
 	};
 
 	metrics.notificationsSent.inc({ notification_type: 'desktop' });
-
-	void api.broadcast('notify.desktop', userId, payload);
+	const receiver_id = 'reactions' in message ? user._id : userId
+	console.log(receiver_id);
+	console.log(Meteor.userId());
+	
+	void api.broadcast('notify.desktop',userId , payload);
 }
 
 export function shouldNotifyDesktop({

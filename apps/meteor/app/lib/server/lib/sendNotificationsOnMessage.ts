@@ -45,6 +45,7 @@ export const sendNotification = async ({
 	room,
 	mentionIds,
 	disableAllMessageNotifications,
+	reaction
 }: {
 	subscription: SubscriptionAggregation;
 	sender: Pick<IUser, '_id' | 'name' | 'username'>;
@@ -57,6 +58,7 @@ export const sendNotification = async ({
 	room: IRoom;
 	mentionIds: string[];
 	disableAllMessageNotifications: boolean;
+	reaction : string
 }) => {
 	if (settings.get<boolean>('Troubleshoot_Disable_Notifications') === true) {
 		return;
@@ -135,6 +137,7 @@ export const sendNotification = async ({
 			user: sender,
 			message,
 			room,
+			reaction
 		});
 	}
 
@@ -263,16 +266,21 @@ const lookup = {
 	},
 } as const;
 
-export async function sendMessageNotifications(message: IMessage, room: IRoom, usersInThread: string[] = []) {
+export async function sendMessageNotifications(message: IMessage, room: IRoom, usersInThread: string[] = [],reaction : string = '') {
+
 	if (settings.get<boolean>('Troubleshoot_Disable_Notifications') === true) {
 		return;
 	}
+	console.log("loggin meteruid -5498457984756-50938456");
+	console.log(Meteor.userId());
+	console.log("loggin meteruid -5498457984756-50938456");
 
-	const sender = await roomCoordinator.getRoomDirectives(room.t).getMsgSender(message.u._id);
+
+	const sender = await roomCoordinator.getRoomDirectives(room.t).getMsgSender(Meteor.userId() as string);
 	if (!sender) {
 		return message;
 	}
-
+ 
 	const { toAll: hasMentionToAll, toHere: hasMentionToHere, mentionIds } = await getMentions(message);
 
 	const mentionIdsWithoutGroups = [...mentionIds];
@@ -347,10 +355,13 @@ export async function sendMessageNotifications(message: IMessage, room: IRoom, u
 	// the query is defined by the server's default values and Notifications_Max_Room_Members setting.
 
 	const subscriptions = await Subscriptions.col.aggregate<SubscriptionAggregation>([{ $match: query }, lookup, filter, project]).toArray();
-
+	
+	console.log('subscriptions--09090');
+	
 	subscriptions.forEach(
-		(subscription) =>
-			void sendNotification({
+		(subscription) =>{
+
+			return void sendNotification({
 				subscription,
 				sender,
 				hasMentionToAll,
@@ -361,7 +372,8 @@ export async function sendMessageNotifications(message: IMessage, room: IRoom, u
 				mentionIds,
 				disableAllMessageNotifications,
 				hasReplyToThread: usersInThread?.includes(subscription.u._id),
-			}),
+				reaction
+			})},
 	);
 
 	return {
@@ -408,7 +420,10 @@ settings.watch('Troubleshoot_Disable_Notifications', (value) => {
 
 	callbacks.add(
 		'afterSaveMessage',
-		(message, room) => sendAllNotifications(message, room),
+		(message, room) => { 
+			console.log('notification sound and desktop noti');
+		 return sendAllNotifications(message, room)
+		},
 		callbacks.priority.LOW,
 		'sendNotificationsOnMessage',
 	);

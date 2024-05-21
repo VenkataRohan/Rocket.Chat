@@ -179,9 +179,9 @@ export class ListenersModule {
 					args: [...args, allowed],
 				})},
 			);
-				console.log("message")
-				console.log(message)
-			// notifications.streamRoomMessage.emitWithoutBroadcast(message.rid, message);
+				// console.log("message")
+				// console.log(message)
+			notifications.streamRoomMessage.emitWithoutBroadcast(message.rid, message);
 		});
 
 		service.onEvent('notify.messagesRead', ({ rid, until, tmid }): void => {
@@ -192,7 +192,8 @@ export class ListenersModule {
 			if (!subscription.u?._id) {
 				return;
 			}
-
+			// console.log("000000000000000000000000");
+			
 			// emit a removed event on msg stream to remove the user's stream-room-messages subscription when the user is removed from room
 			if (clientAction === 'removed') {
 				notifications.streamRoomMessage.__emit(subscription.u._id, clientAction, subscription);
@@ -381,6 +382,9 @@ export class ListenersModule {
 		});
 
 		service.onEvent('notify.desktop', (uid, notification): void => {
+			console.log(notification);
+			console.log('notification');
+			
 			notifications.notifyUserInThisInstance(uid, 'notification', notification);
 		});
 

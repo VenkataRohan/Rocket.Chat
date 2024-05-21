@@ -70,6 +70,8 @@ export class NotificationsModule {
 			if (!userId) {
 				return;
 			}
+			console.log(eventName)
+			console.log("eventName")
 
 			const userEvent = (clientAction: string, { rid }: { rid: string }): void => {
 				switch (clientAction) {
@@ -483,9 +485,9 @@ export class NotificationsModule {
 		this.streamPresence.allowWrite('none');
 	}
 
-	// notifyAll<E extends StreamKeys<'notify-all'>>(eventName: E, ...args: StreamerCallbackArgs<'notify-all', E>): void {
-	// 	return this.streamAll.emit(eventName, ...args);
-	// }
+	notifyAll<E extends StreamKeys<'notify-all'>>(eventName: E, ...args: StreamerCallbackArgs<'notify-all', E>): void {
+		return this.streamAll.emit(eventName, ...args);
+	}
 
 	notifyLogged<E extends StreamKeys<'notify-logged'>>(eventName: E, ...args: StreamerCallbackArgs<'notify-logged', E>): void {
 		return this.streamLogged.emit(eventName, ...args);
@@ -504,7 +506,9 @@ export class NotificationsModule {
 		eventName: E extends ExtractNotifyUserEventName<'notify-user', P> ? E : never,
 		...args: E extends ExtractNotifyUserEventName<'notify-user', P> ? StreamerCallbackArgs<'notify-user', `${P}/${E}`> : never
 	): void {
-		return this.streamUser.emit(`${userId}/${eventName}`, ...args);
+		console.log("notifyUser");
+		
+		return //this.streamUser.emit(`${userId}/${eventName}`, ...args);
 	}
 
 	notifyAllInThisInstance<E extends StreamKeys<'notify-all'>>(eventName: E, ...args: StreamerCallbackArgs<'notify-all', E>): void {
@@ -528,6 +532,7 @@ export class NotificationsModule {
 		eventName: E extends ExtractNotifyUserEventName<'notify-user', P> ? E : never,
 		...args: E extends ExtractNotifyUserEventName<'notify-user', P> ? StreamerCallbackArgs<'notify-user', `${P}/${E}`> : never
 	): void {
+		// console.log("notifyUserInThisInstance")
 		return this.streamUser.emitWithoutBroadcast(`${userId}/${eventName}`, ...args);
 	}
 

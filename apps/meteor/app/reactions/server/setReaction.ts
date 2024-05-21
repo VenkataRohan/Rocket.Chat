@@ -13,6 +13,8 @@ import { canAccessRoomAsync } from '../../authorization/server';
 import { hasPermissionAsync } from '../../authorization/server/functions/hasPermission';
 import { emoji } from '../../emoji/server';
 import { isTheLastMessage } from '../../lib/server/functions/isTheLastMessage';
+import { Subscriptions } from '@rocket.chat/models';
+import { sendMessageNotifications } from '/app/lib/server/lib/sendNotificationsOnMessage';
 
 const removeUserReaction = (message: IMessage, reaction: string, username: string) => {
 	if (!message.reactions) {
@@ -100,7 +102,19 @@ async function setReaction(room: IRoom, user: IUser, message: IMessage, reaction
 		if (isTheLastMessage(room, message)) {
 			await Rooms.setReactionsInLastMessage(room._id, message.reactions);
 		}
+		//EGGkmwEvwPd3c4GAb
+		// console.log("set reaction count 984586345863-459684927364576348");
+				
+		await Subscriptions.incUnreadForRoomIdExcludingUserIds(message.rid, [ message.u._id], 1);
+		await sendMessageNotifications(message,room,undefined,reaction)
+
+		console.log(reaction);
+		console.log("reaction 3490-423492-349482094-92304-0124");
+		
+
 		await callbacks.run('setReaction', message._id, reaction);
+		// console.log("sert reawtvterhjdlfjsldfjlsdfjsd fsadjfalsdjfhsdlhgf");
+		
 		await callbacks.run('afterSetReaction', message, { user, reaction, shouldReact });
 
 		isReacted = true;
@@ -115,7 +129,8 @@ async function setReaction(room: IRoom, user: IUser, message: IMessage, reaction
 
 export async function executeSetReaction(userId: string, reaction: string, messageId: IMessage['_id'], shouldReact?: boolean) {
 	const user = await Users.findOneById(userId);
-
+	console.log("server reaction 12312312321312");
+	
 	if (!user) {
 		throw new Meteor.Error('error-invalid-user', 'Invalid user', { method: 'setReaction' });
 	}
@@ -152,6 +167,7 @@ Meteor.methods<ServerMethods>({
 		}
 
 		try {
+			console.log("set reacttion test")
 			await executeSetReaction(uid, reaction, messageId, shouldReact);
 		} catch (e: any) {
 			if (e.error === 'error-not-allowed' && e.reason && e.details && e.details.rid) {

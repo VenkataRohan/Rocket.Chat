@@ -623,6 +623,7 @@ export class MessagesRaw extends BaseRaw<IMessage> implements IMessagesModel {
 	}
 
 	setReactions(messageId: string, reactions: IMessage['reactions']): Promise<UpdateResult> {
+		console.log("db update for set reaction")
 		return this.updateOne({ _id: messageId }, { $set: { reactions } });
 	}
 

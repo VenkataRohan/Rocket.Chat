@@ -162,7 +162,7 @@ const MessageBox = ({
 		if (!useEmojis) {
 			return;
 		}
-
+		console.log("open emoji")
 		const ref = messageComposerRef.current as HTMLElement;
 		chat.emojiPicker.open(ref, (emoji: string) => chat.composer?.insertText(` :${emoji}: `));
 	});

@@ -14,7 +14,7 @@ import { ChatSubscription } from '../../../models/client';
 import { getUserPreference } from '../../../utils/client';
 import { getUserAvatarURL } from '../../../utils/client/getUserAvatarURL';
 import { sdk } from '../../../utils/client/lib/SDKClient';
-
+import { getEmojiClassNameAndDataTitle } from '../../../../client/lib/utils/renderEmoji';
 declare global {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	interface NotificationEventMap {
@@ -52,11 +52,11 @@ class KonchatNotification {
 			msg: notification.text,
 			notification: true,
 		} as any);
-
+		const reaction = getEmojiClassNameAndDataTitle(notification.text)
 		const requireInteraction = getUserPreference<boolean>(Meteor.userId(), 'desktopNotificationRequireInteraction');
 		const n = new Notification(notification.title, {
 			icon: notification.icon || getUserAvatarURL(notification.payload.sender?.username as string),
-			body: stripTags(message.msg),
+			body: notification.reacted ? `reacted with ${reaction.children}` : stripTags(message.msg),
 			tag: notification.payload._id,
 			canReply: true,
 			silent: true,

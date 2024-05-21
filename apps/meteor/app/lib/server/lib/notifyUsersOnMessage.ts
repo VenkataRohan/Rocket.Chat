@@ -119,6 +119,9 @@ async function updateUsersSubscriptions(message: IMessage, room: IRoom): Promise
 
 		// this shouldn't run only if has group mentions because it will already exclude mentioned users from the query
 		if (!toAll && !toHere && unreadCount === 'all_messages') {
+			console.log(userIds)
+			console.log(message.u._id)
+			console.log('message.u._id')
 			await Subscriptions.incUnreadForRoomIdExcludingUserIds(room._id, [...userIds, message.u._id], 1);
 		}
 	}
@@ -182,7 +185,11 @@ export async function notifyUsersOnMessage(message: IMessage, room: IRoom): Prom
 
 callbacks.add(
 	'afterSaveMessage',
-	(message, room) => notifyUsersOnMessage(message, room),
+	(message, room) =>{
+		console.log("notification count");
+		
+		notifyUsersOnMessage(message, room)
+	},
 	callbacks.priority.MEDIUM,
 	'notifyUsersOnMessage',
 );
