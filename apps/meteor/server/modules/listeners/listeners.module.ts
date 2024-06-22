@@ -381,6 +381,7 @@ export class ListenersModule {
 		});
 
 		service.onEvent('notify.desktop', (uid, notification): void => {
+			console.log(notification)
 			notifications.notifyUserInThisInstance(uid, 'notification', notification);
 		});
 

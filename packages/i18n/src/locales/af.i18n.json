@@ -234,6 +234,7 @@
   "AutoLinker_Phone": "AutoLinker Phone",
   "AutoLinker_Phone_Description": "Outomaties gekoppel vir telefoonnommers. bv `(123) 456-7890`",
   "All": "Almal",
+  "All_and_Reaction": "Almal",
   "AutoLinker_StripPrefix": "AutoLinker Strip Prefix",
   "AutoLinker_StripPrefix_Description": "Kort vertoon. bv https://rocket.chat => raket.chat",
   "All_added_tokens_will_be_required_by_the_user": "Alle toegevoegde tokens sal deur die gebruiker vereis word",

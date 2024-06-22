@@ -16,7 +16,10 @@ import { ChatSubscription } from '../../../models/client';
 import { getUserPreference } from '../../../utils/client';
 import { getUserAvatarURL } from '../../../utils/client/getUserAvatarURL';
 import { sdk } from '../../../utils/client/lib/SDKClient';
-
+// import {  useTranslation } from '@rocket.chat/ui-contexts';
+import { useContext } from 'react';
+import type { TranslationContextValue } from './a';
+import { TranslationContext } from './a';
 declare global {
 	// eslint-disable-next-line @typescript-eslint/naming-convention
 	interface NotificationEventMap {
@@ -56,6 +59,11 @@ class KonchatNotification {
 		} as any);
 
 		const requireInteraction = getUserPreference<boolean>(Meteor.userId(), 'desktopNotificationRequireInteraction');
+		const t = (): TranslationContextValue['translate'] => useContext(TranslationContext).translate;
+		// const tt = t()
+		// console.log(tt('Reacted_with'));
+		// console.log(t.has('all'));
+		
 		const n = new Notification(notification.title, {
 			icon: notification.icon || getUserAvatarURL(notification.payload.sender?.username as string),
 			body: notification.reacted ? parseReaction(notification.text, notification.payload.type as RoomType) : stripTags(message.msg),

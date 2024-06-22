@@ -1,3 +1,4 @@
+// import { useTranslation } from '@rocket.chat/ui-contexts';
 import type { AtLeast, ISubscription, IUser, ICalendarNotification } from '@rocket.chat/core-typings';
 import { Meteor } from 'meteor/meteor';
 import { Tracker } from 'meteor/tracker';
@@ -13,8 +14,13 @@ import { imperativeModal } from '../../lib/imperativeModal';
 import { fireGlobalEvent } from '../../lib/utils/fireGlobalEvent';
 import { isLayoutEmbedded } from '../../lib/utils/isLayoutEmbedded';
 import { router } from '../../providers/RouterProvider';
+import { getReactionLabel } from '/client/hooks/useReactionLabel';
+
+// const reactionLabel = getReactionLabel();
+//     console.log(reactionLabel);
 
 const OutlookCalendarEventModal = lazy(() => import('../../views/outlookCalendar/OutlookCalendarEventModal'));
+
 
 const notifyNewRoom = async (sub: AtLeast<ISubscription, 'rid'>): Promise<void> => {
 	const user = Meteor.user() as IUser | null;
@@ -45,6 +51,8 @@ function notifyNewMessageAudio(rid?: string): void {
 }
 
 Meteor.startup(() => {
+	
+	
 	const notifyUserCalendar = async function (notification: ICalendarNotification): Promise<void> {
 		const user = Meteor.user() as IUser | null;
 		if (!user || user.status === 'busy') {
@@ -82,10 +90,12 @@ Meteor.startup(() => {
 		if (!Meteor.userId()) {
 			return;
 		}
-
+		
 		sdk.stream('notify-user', [`${Meteor.userId()}/notification`], (notification) => {
 			const openedRoomId = ['channel', 'group', 'direct'].includes(router.getRouteName()!) ? RoomManager.opened : undefined;
-
+				console.log("notification");
+				console.log(notification);
+				
 			// This logic is duplicated in /client/startup/unread.coffee.
 			const hasFocus = document.hasFocus();
 			const messageIsInOpenedRoom = openedRoomId === notification.payload.rid;
@@ -99,6 +109,8 @@ Meteor.startup(() => {
 			if (isLayoutEmbedded()) {
 				if (!hasFocus && messageIsInOpenedRoom) {
 					// Show a notification.
+					console.log("layout");
+					
 					KonchatNotification.showDesktop(notification);
 				}
 			} else if (!hasFocus || !messageIsInOpenedRoom) {

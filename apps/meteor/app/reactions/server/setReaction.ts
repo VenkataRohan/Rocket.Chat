@@ -159,6 +159,9 @@ Meteor.methods<ServerMethods>({
 		}
 
 		try {
+			console.log("setReaction 78");
+			console.log(reaction);
+			
 			await executeSetReaction(uid, reaction, messageId, shouldReact);
 		} catch (e: any) {
 			if (e.error === 'error-not-allowed' && e.reason && e.details && e.details.rid) {

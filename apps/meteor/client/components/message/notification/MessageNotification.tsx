@@ -12,6 +12,9 @@ type MessageNotificationProps = {
 
 const MessageNotification = ({ label, bg }: MessageNotificationProps): ReactElement => {
 	const t = useTranslation();
+	console.log('label');
+	console.log(label);
+	
 	return <Box width='x8' aria-label={t(label)} borderRadius='full' height='x8' bg={bg} />;
 };
 

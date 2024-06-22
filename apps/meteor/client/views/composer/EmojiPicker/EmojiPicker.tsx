@@ -122,7 +122,10 @@ const EmojiPicker = ({ reference, onClose, onPickEmoji }: EmojiPickerProps) => {
 		}
 
 		setSearchTerm('');
-
+		console.log("emoji picker 56");
+		console.log(tone);
+		
+		
 		onPickEmoji(_emoji + tone);
 		addRecentEmoji(_emoji + tone);
 		onClose();

@@ -167,7 +167,11 @@ const MessageBox = ({
 		}
 
 		const ref = messageComposerRef.current as HTMLElement;
-		chat.emojiPicker.open(ref, (emoji: string) => chat.composer?.insertText(` :${emoji}: `));
+		chat.emojiPicker.open(ref, (emoji: string) => {
+			console.log('message box emoji');
+			
+			// return chat.composer?.insertText(`react :${emoji}: `)});
+			return chat.composer?.insertText(` :${emoji}: `)});
 	});
 
 	const handleSendMessage = useMutableCallback(() => {
